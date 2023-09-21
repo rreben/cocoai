@@ -32,12 +32,14 @@ def main(target_repo_path):
 
     for foldername, subfolders, filenames in os.walk(target_repo_path):
         for filename in filenames:
-            if filename.endswith(".py"):
-                absolute_file_path = os.path.join(foldername, filename)
-                relative_file_path = os.path.relpath(absolute_file_path, target_repo_path)
+            absolute_file_path = os.path.join(foldername, filename)
+            relative_file_path = os.path.relpath(absolute_file_path, target_repo_path)
 
-                with open(absolute_file_path, "r", encoding="utf-8", errors="ignore") as file:
-                    content = file.read()
+            with open(absolute_file_path, "r", encoding="utf-8", errors="ignore") as file:
+                content = file.read()
+                line_count = len(content.splitlines())
+
+                if filename.endswith(".py"):
                     tree = ast.parse(content, filename=absolute_file_path)
 
                     function_counter = FunctionCounter()
@@ -48,10 +50,11 @@ def main(target_repo_path):
                     statement_counter = StatementCounter()
                     statement_counter.visit(tree)
                     statement_count = statement_counter.statement_count
+                else:
+                    function_count = "n.a."
+                    statement_count = "n.a."
 
-                    line_count = len(content.splitlines())
-
-                    file_data.append((filename, relative_file_path, function_count, statement_count, line_count))
+                file_data.append((filename, relative_file_path, function_count, statement_count, line_count))
 
     print("| Filename | Path | Number of Functions | Number of Statements | Number of Lines |")
     print("| --- | --- | --- | --- | --- |")
