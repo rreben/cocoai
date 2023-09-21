@@ -36,6 +36,7 @@ def main(target_repo_path):
                     function_count = counter.function_count
                     total_function_count += function_count
 
+                    file.seek(0)
                     line_count = sum(1 for line in file)
                     file_data.append((filename, relative_file_path, function_count, line_count))
 
