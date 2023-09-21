@@ -1,5 +1,6 @@
 import ast
 import os
+import click
 
 
 class FunctionCounter(ast.NodeVisitor):
@@ -11,22 +12,27 @@ class FunctionCounter(ast.NodeVisitor):
         self.generic_visit(node)
 
 
-# Path to the cloned repository
-target_repo_path = "<path-to-target-repo>"
+@click.command()
+@click.argument('target_repo_path')
+def main(target_repo_path):
+    # Path to the cloned repository is now set from the command line
 
-function_count = 0
+    function_count = 0
 
-for foldername, subfolders, filenames in os.walk(repo_path):
-    for filename in filenames:
-        if filename.endswith(".py"):
-            file_path = os.path.join(foldername, filename)
+    for foldername, subfolders, filenames in os.walk(target_repo_path):
+        for filename in filenames:
+            if filename.endswith(".py"):
+                file_path = os.path.join(foldername, filename)
 
-            with open(
-                    file_path, "r", encoding="utf-8", errors="ignore") as file:
-                tree = ast.parse(file.read(), filename=file_path)
+                with open(
+                        file_path, "r", encoding="utf-8", errors="ignore") as file:
+                    tree = ast.parse(file.read(), filename=file_path)
 
-                counter = FunctionCounter()
-                counter.visit(tree)
-                function_count += counter.function_count
+                    counter = FunctionCounter()
+                    counter.visit(tree)
+                    function_count += counter.function_count
 
-print(f"Number of functions: {function_count}")
+    print(f"Number of functions: {function_count}")
+
+if __name__ == "__main__":
+    main()
