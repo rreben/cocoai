@@ -17,7 +17,9 @@ class FunctionCounter(ast.NodeVisitor):
 def main(target_repo_path):
     # Path to the cloned repository is now set from the command line
 
-    function_count = 0
+    file_data = []
+
+    total_function_count = 0
 
     for foldername, subfolders, filenames in os.walk(target_repo_path):
         for filename in filenames:
@@ -30,9 +32,16 @@ def main(target_repo_path):
 
                     counter = FunctionCounter()
                     counter.visit(tree)
-                    function_count += counter.function_count
+                    function_count = counter.function_count
+                    total_function_count += function_count
 
-    print(f"Number of functions: {function_count}")
+                    file_data.append((filename, file_path, function_count))
+
+    print("| Filename | Path | Number of Functions |")
+    print("| --- | --- | --- |")
+    for filename, path, function_count in file_data:
+        print(f"| {filename} | {path} | {function_count} |")
+    print(f"| Total |  | {total_function_count} |")
 
 if __name__ == "__main__":
     main()
