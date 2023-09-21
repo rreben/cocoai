@@ -3,13 +3,14 @@ import os
 import click
 
 
-class FunctionCounter(ast.NodeVisitor):
+class StatementCounter(ast.NodeVisitor):
     def __init__(self):
-        self.function_count = 0
+        self.statement_count = 0
 
-    def visit_FunctionDef(self, node):
-        self.function_count += 1
-        self.generic_visit(node)
+    def generic_visit(self, node):
+        if isinstance(node, ast.stmt):
+            self.statement_count += 1
+        super().generic_visit(node)
 
 
 @click.command()
@@ -31,19 +32,19 @@ def main(target_repo_path):
                         absolute_file_path, "r", encoding="utf-8", errors="ignore") as file:
                     tree = ast.parse(file.read(), filename=absolute_file_path)
 
-                    counter = FunctionCounter()
+                    counter = StatementCounter()
                     counter.visit(tree)
-                    function_count = counter.function_count
-                    total_function_count += function_count
+                    statement_count = counter.statement_count
+                    total_function_count += statement_count
 
                     file.seek(0)
-                    line_count = sum(1 for line in file)
+                    line_count = statement_count
                     file_data.append((filename, relative_file_path, function_count, line_count))
 
-    print("| Filename | Path | Number of Functions | Number of Lines |")
+    print("| Filename | Path | Number of Statements | Number of Lines |")
     print("| --- | --- | --- | --- |")
-    for filename, path, function_count, line_count in file_data:
-        print(f"| {filename} | {path} | {function_count} | {line_count} |")
+    for filename, path, statement_count, line_count in file_data:
+        print(f"| {filename} | {path} | {statement_count} | {line_count} |")
     print(f"| Total |  | {total_function_count} |  |")
 
 if __name__ == "__main__":
