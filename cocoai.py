@@ -24,7 +24,7 @@ def main(target_repo_path):
     for foldername, subfolders, filenames in os.walk(target_repo_path):
         for filename in filenames:
             if filename.endswith(".py"):
-                file_path = os.path.join(foldername, filename)
+                file_path = os.path.relpath(os.path.join(foldername, filename), target_repo_path)
 
                 with open(
                         file_path, "r", encoding="utf-8", errors="ignore") as file:
