@@ -11,8 +11,8 @@ class FunctionCounter(ast.NodeVisitor):
         self.generic_visit(node)
 
 
-# Pfad zum geklonten Repository
-repo_path = "<path-to-repo>"
+# Path to the cloned repository
+target_repo_path = "<path-to-target-repo>"
 
 function_count = 0
 
