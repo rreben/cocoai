@@ -32,6 +32,9 @@ def main(target_repo_path):
 
     for foldername, subfolders, filenames in os.walk(target_repo_path):
         for filename in filenames:
+            if filename.startswith("."):
+                continue
+
             absolute_file_path = os.path.join(foldername, filename)
             relative_file_path = os.path.relpath(absolute_file_path, target_repo_path)
 
