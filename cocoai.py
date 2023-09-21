@@ -39,7 +39,7 @@ def main(target_repo_path):
 
                     file.seek(0)
                     line_count = statement_count
-                    file_data.append((filename, relative_file_path, function_count, line_count))
+                    file_data.append((filename, relative_file_path, statement_count, line_count))
 
     print("| Filename | Path | Number of Statements | Number of Lines |")
     print("| --- | --- | --- | --- |")
