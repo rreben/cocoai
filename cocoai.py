@@ -43,6 +43,7 @@ def main(target_repo_path):
                     function_counter = FunctionCounter()
                     function_counter.visit(tree)
                     function_count = function_counter.function_count
+                    total_function_count += function_count
 
                     statement_counter = StatementCounter()
                     statement_counter.visit(tree)
