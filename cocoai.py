@@ -36,13 +36,14 @@ def main(target_repo_path):
                     function_count = counter.function_count
                     total_function_count += function_count
 
-                    file_data.append((filename, relative_file_path, function_count))
+                    line_count = sum(1 for line in file)
+                    file_data.append((filename, relative_file_path, function_count, line_count))
 
-    print("| Filename | Path | Number of Functions |")
-    print("| --- | --- | --- |")
-    for filename, path, function_count in file_data:
-        print(f"| {filename} | {path} | {function_count} |")
-    print(f"| Total |  | {total_function_count} |")
+    print("| Filename | Path | Number of Functions | Number of Lines |")
+    print("| --- | --- | --- | --- |")
+    for filename, path, function_count, line_count in file_data:
+        print(f"| {filename} | {path} | {function_count} | {line_count} |")
+    print(f"| Total |  | {total_function_count} |  |")
 
 if __name__ == "__main__":
     main()
